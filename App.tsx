@@ -20,12 +20,10 @@ export default function App() {
   }, []);
 
   if (hasPermission === null) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
   if (hasPermission === false) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
         <Text style={styles.message}>Precisamos da sua permissão para usar a câmera e o microfone</Text>
