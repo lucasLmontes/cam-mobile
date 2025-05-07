@@ -26,7 +26,11 @@ export const saveVideo = async (videoUri: string) => {
     const timestamp = Date.now();
     const filename = `videos/${userId}/${timestamp}.mp4`;
     
-    const fileInfo = await FileSystem.getInfoAsync(videoUri);
+    const fileInfo = await FileSystem.getInfoAsync(videoUri, { size: true });
+    
+    if (!fileInfo.exists) {
+      throw new Error('Arquivo de vídeo não encontrado');
+    }
     
     const response = await fetch(videoUri);
     const blob = await response.blob();
@@ -53,7 +57,7 @@ export const saveVideo = async (videoUri: string) => {
             url: downloadURL,
             userId: userId,
             createdAt: timestamp,
-            fileSize: fileInfo.size || 0
+            fileSize: fileInfo.size ?? 0
           };
           
           const docRef = await addDoc(collection(db, 'videos'), videoData);
